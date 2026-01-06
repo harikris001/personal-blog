@@ -1,0 +1,123 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../app/generated/prisma"
+}
+
+// For Authentication with NextAuth.js
+
+datasource db {
+  provider = "postgresql"
+  url      = env("POSTGRESS_URL")
+}
+
+enum Role {
+  ADMIN
+  USER
+}
+
+enum PostStatus {
+  DRAFT // newly created blog (unsubmitted or in progress)
+  PENDING // submitted for review
+  APPROVED // visible to everyone (after admin approval)
+  REJECTED // admin can reject
+}
+
+model User {
+  id       String  @id @default(cuid())
+  name     String?
+  email    String? @unique
+  password String?
+  image    String?
+  bio      String? @db.Text
+  role     Role    @default(USER)
+
+  posts    Post[]
+  comments Comment[]
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  Account   Account[]
+
+}
+
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String?
+  access_token      String?
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String?
+  session_state     String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+}
+
+
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+}
+
+// Blog Models
+
+model Post {
+  id        String      @id @default(cuid())
+  title     String
+  slug      String      @unique
+  content   String      @db.Text
+  excerpt   String?     @db.Text
+  thumbnail String? //image Url <TODO>
+  published Boolean     @default(false)
+  author    User        @relation(fields: [authorId], references: [id])
+  authorId  String
+  comments  Comment[]
+  tags      TagOnPost[]
+  createdAt DateTime    @default(now())
+  updatedAt DateTime    @updatedAt
+}
+
+model Comment {
+  id        String   @id @default(cuid())
+  content   String   @db.Text
+  author    User     @relation(fields: [authorId], references: [id])
+  authorId  String
+  post      Post     @relation(fields: [postId], references: [id])
+  postId    String
+  parentId  String? // For nested comments
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Tag {
+  id        String      @id @default(cuid())
+  name      String      @unique
+  slug      String      @unique
+  posts     TagOnPost[]
+  createdAt DateTime    @default(now())
+}
+
+model TagOnPost {
+  post   Post   @relation(fields: [postId], references: [id])
+  postId String
+  tag    Tag    @relation(fields: [tagId], references: [id])
+  tagId  String
+
+  @@id([postId, tagId])
+}
