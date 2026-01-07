@@ -3,6 +3,7 @@
 :root {
     --background: #fafafa;
     --foreground: #374151;
+    --primary: #f4f4f4a4;
 }
 
 @media (prefers-color-scheme: light) {
@@ -25,5 +26,9 @@ body {
 @layer utilities {
     .hero-image {
         @apply absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent;
+    }
+
+    .profile-buttons {
+        @apply px-6 py-2.5 bg-blue-500 text-white rounded-full font-medium shadow-lg shadow-blue-700/25 hover:shadow-blue-700/40 hover:-translate-y-0.5 transition-all duration-200 flex items-center gap-2;
     }
 }
