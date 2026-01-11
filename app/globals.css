@@ -1,15 +1,40 @@
 @import "tailwindcss";
 
+/* =========================
+   DESIGN TOKENS
+   ========================= */
 :root {
-    --background: #fafafa;
-    --foreground: #374151;
-    --primary: #f4f4f4a4;
+    --background: #f3f4f6;
+    /* gray-100 */
+
+    --foreground: #ffffff;
+
+    /* Primary text (dark, readable) */
+    --text-primary: #111827;
+    /* gray-900 */
+
+    /* Secondary text */
+    --text-secondary: #6b7280;
+    /* gray-500 */
+
+    /* Borders / dividers */
+    --border: #e5e7eb;
+    /* gray-200 */
+
+    /* Primary accent (matches UI buttons) */
+    --primary: #6366f1;
+    /* indigo-500 */
+    --primary-hover: #4f46e5;
+    /* indigo-600 */
 }
 
+/* No color inversion needed for light mode */
 @media (prefers-color-scheme: light) {
     :root {
-        --background: #374151;
-        --foreground: #fafafa;
+        --background: #f3f4f6;
+        --foreground: #ffffff;
+        --text-primary: #111827;
+        --text-secondary: #6b7280;
     }
 }
 
@@ -17,18 +42,37 @@
     --font-poppins: "Poppins", sans-serif;
 }
 
+/* =========================
+   BASE STYLES
+   ========================= */
 body {
-    background: var(--background);
-    color: var(--foreground);
+    background-color: var(--background);
+    color: var(--text-primary);
     font-family: var(--font-poppins);
 }
 
+/* =========================
+   UTILITIES
+   ========================= */
 @layer utilities {
+
+    /* Card / panel */
+    .surface {
+        @apply bg-white rounded-2xl shadow-sm border border-gray-200;
+    }
+
+    /* Muted text */
+    .text-muted {
+        @apply text-gray-500;
+    }
+
+    /* Gradient overlay (unchanged) */
     .hero-image {
         @apply absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent;
     }
 
+    /* Primary action button */
     .profile-buttons {
-        @apply px-6 py-2.5 bg-blue-500 text-white rounded-full font-medium shadow-lg shadow-blue-700/25 hover:shadow-blue-700/40 hover:-translate-y-0.5 transition-all duration-200 flex items-center gap-2;
+        @apply px-6 py-2.5 bg-indigo-500 text-white rounded-full font-medium shadow-lg shadow-indigo-500/25 hover:bg-indigo-600 hover:shadow-indigo-500/40 hover:-translate-y-0.5 transition-all duration-200 flex items-center gap-2;
     }
 }
