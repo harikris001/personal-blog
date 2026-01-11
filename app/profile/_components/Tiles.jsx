@@ -1,10 +1,14 @@
 import React from 'react'
+import { Newspaper, Heart, MessageSquareText, UserStar } from "lucide-react";
 
 const Tiles = ({ name, value }) => {
     return (
-        <div className="p-6 rounded-2xl shadow-soft border border-gray-700/50 flex flex-col items-center justify-center text-center hover:border-blue/30 transition-colors cursor-default w-48">
+        <div className="surface bg-white py-6 rounded-2xl shadow-soft flex flex-col items-center justify-center text-center transition-colors cursor-default w-55">
             <span className="text-primary mb-2 text-3xl opacity-80 capitalize">
-                {name}
+                {name === "articles" && <Newspaper color="blue" size={32} />}
+                {name === "likes" && <Heart color="red" size={32} />}
+                {name === "comments" && <MessageSquareText color="orange" size={32} />}
+                {name === "followers" && <UserStar color="cyan" size={32} />}
             </span>
             <span className="text-3xl font-bold text-text-main-light dark:text-text-main-dark mb-1">
                 {value}
